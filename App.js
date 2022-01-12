@@ -30,14 +30,13 @@ import {configureStore} from './src/store';
 const reduxStore = configureStore();
 
 import MenuScreen from './src/screens/Menu/MenuScreen';
+import AppNavContainer from './src/navigation/AppNavContainer';
 
 
 const App = () => {
   return (
     <Provider store={reduxStore}>
-      <View style={{flex: 1, backgroundColor: '#aacfe4'}}>
-        <MenuScreen />
-      </View>
+      <AppNavContainer />
     </Provider>
   );
 };
