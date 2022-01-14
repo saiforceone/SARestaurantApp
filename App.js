@@ -1,39 +1,28 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react';
 import { Provider } from 'react-redux';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import AppLoading from 'expo-app-loading';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import { useFonts, Cairo_400Regular } from '@expo-google-fonts/cairo';
+import { Inter_400Regular } from '@expo-google-fonts/inter';
 
 import {configureStore} from './src/store';
 const reduxStore = configureStore();
 
-import MenuScreen from './src/screens/Menu/MenuScreen';
 import AppNavContainer from './src/navigation/AppNavContainer';
 
-
 const App = () => {
+  // todo: try to fix font loading issue. error related to expo-file-system
+  // let [fontsLoaded, fontLoadError] = useFonts({
+  //   Inter_400Regular,
+  // });
+
+  // console.log('font load error: ', fontLoadError);
+
+  // if (!fontsLoaded) {
+  //   console.log('font was not loaded');
+  //   return <AppLoading />
+  // }
+
   return (
     <Provider store={reduxStore}>
       <AppNavContainer />
