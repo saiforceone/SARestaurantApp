@@ -4,8 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { fetchMenuItems } from '../../store/actions/menuItemActions';
 import ListItemCard from '../../components/common/ListItemCard/ListItemCard';
-import { FONT_SIZES, FONT_WEIGHTS } from '../../constants/styleConstants';
+import { FONT_FAMILIES, FONT_SIZES, FONT_WEIGHTS } from '../../constants/styleConstants';
 import ListHeader from '../../components/common/ListHeader/ListHeader';
+import FormattingUtils from '../../utils/FormattingUtils';
 
 const MenuScreen = props => {
 
@@ -29,12 +30,13 @@ const MenuScreen = props => {
 
   const renderItem = ({item}) => (
     <ListItemCard
+      key={`meneu-item-${item['_id']}`}
       action={() => onNavigateToDetails({item})}
       title={item['itemName']}
       details={item['description']}
       imageUrl={item['mainImage']}
-      extraContent={<Text style={{fontSize: FONT_SIZES.MEDIUM, fontWeight: FONT_WEIGHTS.HEAVY}}>
-        {item['baseCost']}
+      extraContent={<Text style={{fontFamily: FONT_FAMILIES.Cairo_SemiBold, fontSize: FONT_SIZES.MEDIUM, fontWeight: FONT_WEIGHTS.HEAVY, lineHeight: FONT_SIZES.MEDIUM * 1.25}}>
+        {FormattingUtils.formatAsCurrency({value: item['baseCost']})}
       </Text>}
     />
   );

@@ -1,48 +1,10 @@
 import {StyleSheet} from 'react-native';
+import { COLORS, FONT_FAMILIES, FONT_SIZES, FONT_WEIGHTS, SPACING_CONSTANTS } from '../../constants/styleConstants';
 
-export const SPACING_CONSTANTS = {
-  SMALL: 5,
-  MEDIUM: 10,
-  LARGE: 15,
-  X_LARGE: 20
-};
-
-export const COLORS = {
-  BLUEISH: '#03071E',
-  DARKISH: '#333333',
-  GREENISH: '#008000',
-  OFFWHITE: '#f4f4f4',
-  ORANGEISH: '#DC2F02',
-  REDISH: '#D00000',
-};
-
-export const FONT_FAMILIES = {
-  Cairo_Light: 'Cairo_300Light',
-  Cairo_Regular: 'Cairo_400Regular',
-  Cairo_SemiBold: 'Cairo_600SemiBold',
-  Inter_Regular: 'Inter_400Regular',
-  Inter_SemiBold: 'Inter_600SemiBold',
-};
-
-export const FONT_SIZES = {
-  SMALL: 12,
-  MEDIUM: 16,
-  LARGE: 20,
-  X_LARGE: 24
-};
-
-export const FONT_WEIGHTS = {
-  LIGHT: '200',
-  NORMAL: '300',
-  MEDIUM: '600',
-  HEAVY: '800'
-};
-
-export const DetailScreenStyles = StyleSheet.create({
+export const MenuItemDetailStyles = StyleSheet.create({
   container: {
     backgroundColor: '#F5F5F5',
-    flex: 1,
-    padding: 0
+    flex: 1
   },
   scrollView: {
     flexGrow: 1,

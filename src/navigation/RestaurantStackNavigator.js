@@ -8,7 +8,14 @@ const RestaurantStackNavigator = createNativeStackNavigator();
 
 export default () => (
   <RestaurantStackNavigator.Navigator>
-    <RestaurantStackNavigator.Screen component={RestaurantLocationScreen} name={'restaurantLocationScreen'} />
-    <RestaurantStackNavigator.Screen component={RestaurantDetailScreen} name={'restaurantDetailScreen'} />
+    <RestaurantStackNavigator.Screen
+      component={RestaurantLocationScreen}
+      name={'restaurantLocationScreen'}
+      options={{title: 'Restaurant Locations'}}
+    />
+    <RestaurantStackNavigator.Screen
+      component={RestaurantDetailScreen}
+      name={'restaurantDetailScreen'}
+    />
   </RestaurantStackNavigator.Navigator>
 )

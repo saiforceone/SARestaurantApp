@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {Image, Text} from 'react-native-elements';
 import ListItemCardStyles from './ListItemCard.styles';
 

@@ -9,7 +9,9 @@ const MenuStackNavigator = createNativeStackNavigator();
 export default () => {
   return (
     <MenuStackNavigator.Navigator>
-      <MenuStackNavigator.Screen component={MenuScreen} name={'menuScreen'} />
+      <MenuStackNavigator.Screen component={MenuScreen} name={'menuScreen'} options={{
+        title: 'Menu'
+      }} />
       <MenuStackNavigator.Screen component={MenuItemDetailScreen} name={'menuItemDetailScreen'} />
     </MenuStackNavigator.Navigator>
   );

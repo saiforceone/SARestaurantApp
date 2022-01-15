@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import { COLORS, FONT_SIZES, FONT_WEIGHTS, SPACING_CONSTANTS } from '../../../constants/styleConstants';
+import { COLORS, FONT_FAMILIES, FONT_SIZES, FONT_WEIGHTS, SPACING_CONSTANTS } from '../../../constants/styleConstants';
 
 const ListItemCardStyles = StyleSheet.create({
   container: {
@@ -25,11 +25,14 @@ const ListItemCardStyles = StyleSheet.create({
   },
   title: {
     color: COLORS.DARKISH,
+    fontFamily: FONT_FAMILIES.Cairo_SemiBold,
     fontSize: FONT_SIZES.X_LARGE,
     fontWeight: FONT_WEIGHTS.HEAVY,
   },
   details: {
     color: COLORS.DARKISH,
+    fontFamily: FONT_FAMILIES.Cairo_Regular,
+    lineHeight: FONT_SIZES.MEDIUM * 1.25,
     marginTop: SPACING_CONSTANTS.SMALL,
   },
   extraContentContainer: {

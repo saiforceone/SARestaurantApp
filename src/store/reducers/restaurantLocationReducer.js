@@ -2,7 +2,7 @@ import { generateCommonState } from "./helpers/generateCommonState";
 import { RESTAURANT_LOCATION_ACTIONS as RLA } from "../constants";
 
 const INITIAL_STATE = {
-  ...generateCommonState,
+  ...generateCommonState(),
 };
 
 export default (state = INITIAL_STATE, action) => {
