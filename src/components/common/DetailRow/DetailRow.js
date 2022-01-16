@@ -12,7 +12,7 @@ import DetailRowStyles from './DetailRow.styles';
  * @description Renders a detail row that shows an optional icon, label and text
  */
 const DetailRow = props => {
-  const {action, iconElement, labelText, valueText} = props;
+  const {action, hideLabel, iconElement, labelText, valueText} = props;
   return (
     <View style={DetailRowStyles.container}>
       {iconElement && (
@@ -20,9 +20,11 @@ const DetailRow = props => {
           {iconElement}
         </View>)
       }
-      <View style={DetailRowStyles.innerContainer}>
-        <Text style={DetailRowStyles.labelText}>{labelText}</Text>
-      </View>
+      {!hideLabel && (
+        <View style={DetailRowStyles.innerContainer}>
+          <Text style={DetailRowStyles.labelText}>{labelText}</Text>
+        </View>
+      )}
       <Text style={DetailRowStyles.valueText}>{valueText}</Text>
       {action && (
         <Button
@@ -31,6 +33,7 @@ const DetailRow = props => {
             color: COLORS.JUSTWHITE,
             name: 'open-in-new'
           }}
+          onPress={action}
         />
       )}
     </View>
@@ -40,7 +43,8 @@ const DetailRow = props => {
 DetailRow.propTypes = {
   action: PropTypes.func,
   iconElement: PropTypes.element,
-  labelText: PropTypes.string.isRequired,
+  labelText: PropTypes.string,
+  hideLabel: PropTypes.bool,
   valueText: PropTypes.string.isRequired,
 };
 

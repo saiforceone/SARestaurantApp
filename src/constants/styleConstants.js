@@ -41,6 +41,16 @@ export const FONT_WEIGHTS = {
   HEAVY: '800'
 };
 
+export const CommonNavStyles = {
+  headerStyle: {
+    backgroundColor: COLORS.REDISH,
+  },
+  headerTintColor: COLORS.JUSTWHITE,
+  headerTitleStyle: {
+    fontWeight: FONT_WEIGHTS.MEDIUM,
+  },
+};
+
 export const DetailScreenStyles = StyleSheet.create({
   container: {
     backgroundColor: '#F5F5F5',
@@ -49,6 +59,9 @@ export const DetailScreenStyles = StyleSheet.create({
   },
   scrollView: {
     flexGrow: 1,
+  },
+  dividerStyle: {
+    marginVertical: SPACING_CONSTANTS.MEDIUM,
   },
   mainImage: {
     height: 280,
