@@ -10,16 +10,19 @@ export const SPACING_CONSTANTS = {
 export const COLORS = {
   BLUEISH: '#03071E',
   DARKISH: '#333333',
+  NOT_SO_DARKISH: '#666',
   GREENISH: '#008000',
   OFFWHITE: '#f4f4f4',
   ORANGEISH: '#DC2F02',
   REDISH: '#D00000',
+  JUSTWHITE: '#FFF',
 };
 
 export const FONT_FAMILIES = {
   Cairo_Light: 'Cairo_300Light',
   Cairo_Regular: 'Cairo_400Regular',
   Cairo_SemiBold: 'Cairo_600SemiBold',
+  Inter_Light: 'Inter_300Light',
   Inter_Regular: 'Inter_400Regular',
   Inter_SemiBold: 'Inter_600SemiBold',
 };

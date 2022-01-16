@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import AppLoading from 'expo-app-loading';
 
 import { useFonts, Cairo_400Regular, Cairo_300Light, Cairo_600SemiBold } from '@expo-google-fonts/cairo';
-import { Inter_400Regular, Inter_600SemiBold } from '@expo-google-fonts/inter';
+import { Inter_300Light, Inter_400Regular, Inter_600SemiBold } from '@expo-google-fonts/inter';
 
 import {configureStore} from './src/store';
 const reduxStore = configureStore();
@@ -15,6 +15,7 @@ const App = () => {
     Cairo_300Light,
     Cairo_400Regular,
     Cairo_600SemiBold,
+    Inter_300Light,
     Inter_400Regular,
     Inter_600SemiBold,
   });
