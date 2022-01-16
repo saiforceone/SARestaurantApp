@@ -9,6 +9,7 @@ const generateCommonActions = ({prefix = ''}) => ({
 
 export const APP_ACTIONS = {
   SET_AUTH_TOKEN: 'APP_SET_AUTH_TOKEN',
+  SET_USER_PROFILE: 'APP_SET_USER_PROFILE',
   UNSET_DATA: 'APP_UNSET_DATA',
 };
 

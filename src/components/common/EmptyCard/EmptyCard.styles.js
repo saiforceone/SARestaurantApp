@@ -21,5 +21,8 @@ export default StyleSheet.create({
     fontWeight: FONT_WEIGHTS.MEDIUM,
     marginTop: SPACING_CONSTANTS.SMALL,
     textAlign: 'center',
+  },
+  actionElements: {
+    marginTop: SPACING_CONSTANTS.MEDIUM
   }
 });

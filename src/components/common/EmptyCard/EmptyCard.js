@@ -12,7 +12,7 @@ import EmptyCardStyles from './EmptyCard.styles';
  * @description Render an empty card
  */
 const EmptyCard = props => {
-  const {title, details} = props;
+  const {title, details, actionElements} = props;
   return (
     <View style={EmptyCardStyles.container}>
       <View style={EmptyCardStyles.innerContainer}>
@@ -24,6 +24,11 @@ const EmptyCard = props => {
         />
         <Text style={EmptyCardStyles.title}>{title}</Text>
         {details && (<Text style={EmptyCardStyles.details}>{details}</Text>)}
+        {actionElements && (
+          <View style={EmptyCardStyles.actionElements}>
+            {actionElements}
+          </View>
+        )}
       </View>
     </View>
   );
@@ -32,6 +37,7 @@ const EmptyCard = props => {
 EmptyCard.propTypes = {
   title: PropTypes.string.isRequired,
   details: PropTypes.string,
+  actionElements: PropTypes.element,
 };
 
 export default EmptyCard;
