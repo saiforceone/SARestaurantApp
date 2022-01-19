@@ -1,6 +1,7 @@
 import React from 'react';
 import {ScrollView, Text, View} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
 import {Divider, Icon} from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DetailRow from '../../components/common/DetailRow/DetailRow';
@@ -22,14 +23,15 @@ const navigateTo = ({navigation, target, params}) => {
 
 /**
  * @function renderContent
+ * @param {Boolean} hasAuthToken
  * @param {Object} navigation
  * @returns {JSX.Element}
  * @description Renders content for the settings screen
  */
-const renderContent = ({navigation}) => {
+const renderContent = ({hasAuthToken, navigation}) => {
   return (
     <ScrollView contentContainerStyle={[DetailScreenStyles.scrollView, {padding: SPACING_CONSTANTS.LARGE}]}>
-      <UserProfileCard />
+      <UserProfileCard action={() => navigateTo({navigation, target: 'settingsAuthScreen'})} hasAuthToken={hasAuthToken} />
       <Divider style={DetailScreenStyles.dividerStyle} />
       <DetailRow
         action={() => navigateTo({navigation, target: 'aboutScreen'})}
@@ -75,11 +77,13 @@ const renderContent = ({navigation}) => {
  * @description Renders a settings /about screen
  */
 const SettingsScreen = () => {
+  const dispatch = useDispatch();
+  const appStore = useSelector(state => state.app);
   const navigation = useNavigation();
-  // todo: add functionality to retrieve user from redux
+  
   return (
     <SafeAreaView style={DetailScreenStyles.container}>
-      {renderContent({navigation})}
+      {renderContent({hasAuthToken: !!appStore.authToken, navigation})}
     </SafeAreaView>
   );
 };

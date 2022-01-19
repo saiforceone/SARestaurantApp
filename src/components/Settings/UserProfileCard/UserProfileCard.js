@@ -12,7 +12,7 @@ import UserProfileCardStyles from './UserProfileCard.styles';
  * @description Renders a user profile card with options to login or logout
  */
 const UserProfileCard = props => {
-  const {action, user} = props;
+  const {action, hasAuthToken, user} = props;
   return (
     <View style={UserProfileCardStyles.container}>
       <Icon
@@ -21,7 +21,7 @@ const UserProfileCard = props => {
         size={60}
         type={'material-community'}
       />
-      {user ? (
+      {hasAuthToken ? (
         <>
           <Text style={UserProfileCardStyles.username}>Some User</Text>
           <Text style={UserProfileCardStyles.lastLogin}>January 14, 2022 @ 4:00PM</Text>
@@ -33,22 +33,23 @@ const UserProfileCard = props => {
       )}
       <Button
         buttonStyle={{
-          backgroundColor: user ? COLORS.REDISH : COLORS.GREENISH
+          backgroundColor: hasAuthToken ? COLORS.REDISH : COLORS.GREENISH
         }}
         containerStyle={{marginTop: SPACING_CONSTANTS.MEDIUM}}
         icon={{
           color: COLORS.OFFWHITE,
-          name: user ? 'logout-variant' : 'login-variant',
+          name: hasAuthToken ? 'logout-variant' : 'login-variant',
           type: 'material-community'
         }}
         onPress={action}
-        title={user ? 'Logout' : 'Login'}
+        title={hasAuthToken ? 'Logout' : 'Login'}
       />
     </View>
   );
 };
 
 UserProfileCard.propTypes = {
+  hasAuthToken: PropTypes.bool,
   user: PropTypes.object,
   action: PropTypes.func,
 }

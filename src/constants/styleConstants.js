@@ -16,6 +16,7 @@ export const COLORS = {
   ORANGEISH: '#DC2F02',
   REDISH: '#D00000',
   JUSTWHITE: '#FFF',
+  KINDA_SILVER: '#C0C0C0',
 };
 
 export const FONT_FAMILIES = {
@@ -40,6 +41,8 @@ export const FONT_WEIGHTS = {
   MEDIUM: '600',
   HEAVY: '800'
 };
+
+export const SAFE_AREA_EDGES = ['top', 'left', 'right'];
 
 export const CommonNavStyles = {
   headerStyle: {
