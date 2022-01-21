@@ -7,6 +7,10 @@ import ListItemCard from '../../components/common/ListItemCard/ListItemCard';
 import { FONT_FAMILIES, FONT_SIZES, FONT_WEIGHTS } from '../../constants/styleConstants';
 import ListHeader from '../../components/common/ListHeader/ListHeader';
 import FormattingUtils from '../../utils/FormattingUtils';
+import StorageUtils from '../../utils/StorageUtils';
+import { STORAGE_CONSTANTS } from '../../constants';
+import ActionCreatorUtils from '../../store/utils/ActionCreatorUtils';
+import { APP_ACTIONS } from '../../store/constants';
 
 const MenuScreen = props => {
 
@@ -18,6 +22,18 @@ const MenuScreen = props => {
 
   useEffect(() => {
     dispatch(fetchMenuItems({filter: {}}));
+  }, []);
+
+  useEffect(() => {
+    StorageUtils.getItemSecure({key: STORAGE_CONSTANTS.AUTH_TOKEN}).then(result => {
+      console.log('result: ', result);
+      if (result.data) {
+        console.log(' on load, result.data: ', result.data);
+        dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_AUTH_TOKEN, result.data));
+      }
+    }).catch(e => {
+      console.log("well, this didn't work.");
+    })
   }, []);
 
   const keyExtractor = (item, id) => item['_id'];

@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {KeyboardAvoidingView, Platform, ScrollView, View} from 'react-native';
+import {Alert, KeyboardAvoidingView, Platform, ScrollView, View} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Button, Icon, Input, Switch, Text } from 'react-native-elements';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -92,12 +92,20 @@ export const AuthScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  // todo: fix this
-  // useEffect(() => {
-  //   if (appStore.token) {
-  //     return navigation.pop();
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (appStore.authToken) {
+      Alert.alert(
+        'Already logged in',
+        'You are already logged in...',
+        [
+          {
+            text: 'Ok',
+          }
+        ]
+      )
+      return navigation.pop();
+    }
+  }, []);
 
   const updateStateVar = useCallback(({varName, value}) => {
     switch (varName) {
@@ -112,11 +120,19 @@ export const AuthScreen = () => {
 
   const authAction = useCallback(() => {
     if (!String(username).trim().length || !String(password).trim().length) {
-      return;
+      return Alert.alert(
+        'Unable to login',
+        'Please enter a username and password',
+        [
+          {
+            text: 'Ok',
+          },
+        ]
+      );
     }
-    console.log(`Attempt auth with username: ${username} and password: ${password} and isRegistering: ${isRegistering}`);
+    
     return dispatch(authenticate({username, password, isRegistering, navigation}));
-  }, []);
+  }, [username, password]);
 
   return (
     <SafeAreaView edges={SAFE_AREA_EDGES} style={AuthScreenStyles.container}>

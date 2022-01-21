@@ -30,15 +30,16 @@ export const authenticate = ({username, password, navigation, isRegistering = fa
       const {data: responseData} = await axios.post(url, payload);
       dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_IS_AUTHENTICATING, false));
 
-      const {success, data} = responseData;
+      const {token} = responseData;
+      console.log('authenticate result: ', token);
 
-      if (!success || !data['token']) {
+      if (!token) {
         return dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_ERROR, 'Failed to authenticate. Check credentials'));
       }
 
-      dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_AUTH_TOKEN, data.token));
+      dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_AUTH_TOKEN, token));
       const storeResult = await StorageUtils.setItemSecure({
-        key: STORAGE_CONSTANTS.AUTH_TOKEN, value: data.token
+        key: STORAGE_CONSTANTS.AUTH_TOKEN, value: token
       });
       if (storeResult.error) {
         return dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_ERROR, 'Something went horribly wrong'));
@@ -47,6 +48,48 @@ export const authenticate = ({username, password, navigation, isRegistering = fa
 
     } catch (e) {
       dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_IS_AUTHENTICATING, false));
+      dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_ERROR, e.toString()));
+    }
+  }
+};
+
+/**
+ * @function getProfile
+ * @returns {*}
+ * @description attempts to retrieve the user's profile
+ */
+export const getProfile = () => {
+  return async dispatch => {
+    try {
+      dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_ERROR, ''));
+      const tokenData = await StorageUtils.getItemSecure({key: STORAGE_CONSTANTS.AUTH_TOKEN});
+
+      if (!tokenData.data) {
+        return dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_ERROR, 'Not authenticated'));
+      }
+
+      const headers = {
+        'Authorization': `${tokenData.data}`,
+      };
+
+      dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_IS_FETCHING_PROFILE, true));
+
+      const url = `${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.PROFILE}`;
+
+      dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_IS_FETCHING_PROFILE, false));
+
+      const {data: responseData} = await axios.get(url, {headers});
+
+      const {success, data} = responseData;
+
+      if (!success || !data.profile) {
+        return dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_ERROR, 'Failed to login'));
+      }
+
+      dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_USER_PROFILE, data.profile));
+      
+    } catch (e) {
+      dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_IS_FETCHING_PROFILE, false));
       dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_ERROR, e.toString()));
     }
   }

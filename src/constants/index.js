@@ -4,7 +4,8 @@ export const API_ENDPOINTS = {
   ORDERS: '/orders',
   RESTAURANT_LOCATIONS: '/restaurant-locations',
   AUTH_LOCAL_LOGIN: '/auth-local/login',
-  AUTH_LOCAL_REGISTER: '/auth-local/register'
+  AUTH_LOCAL_REGISTER: '/auth-local/register',
+  PROFILE: '/users/me',
 };
 
 export const STORAGE_CONSTANTS = {
