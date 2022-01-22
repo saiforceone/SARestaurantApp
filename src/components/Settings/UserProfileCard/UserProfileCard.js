@@ -23,8 +23,8 @@ const UserProfileCard = props => {
       />
       {hasAuthToken ? (
         <>
-          <Text style={UserProfileCardStyles.username}>Some User</Text>
-          <Text style={UserProfileCardStyles.lastLogin}>January 14, 2022 @ 4:00PM</Text>
+          <Text style={UserProfileCardStyles.username}>{user ? user.username : 'N/A'}</Text>
+          <Text style={UserProfileCardStyles.lastLogin}>{user ? user._id : 'N/A'}</Text>
         </>
       ) : (
         <Text style={[UserProfileCardStyles.username, UserProfileCardStyles.notLoggedIn]}>

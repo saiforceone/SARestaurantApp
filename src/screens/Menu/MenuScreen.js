@@ -11,24 +11,27 @@ import StorageUtils from '../../utils/StorageUtils';
 import { STORAGE_CONSTANTS } from '../../constants';
 import ActionCreatorUtils from '../../store/utils/ActionCreatorUtils';
 import { APP_ACTIONS } from '../../store/constants';
+import { getProfile } from '../../store/actions/appAction';
 
-const MenuScreen = props => {
+/**
+ * @function MenuScreen
+ * @returns {JSX.Element}
+ * @description Renders the menu screen 
+ */
+const MenuScreen = () => {
 
   const dispatch = useDispatch();
   const menuItemStore = useSelector(state => state.menuItems);
   const navigation = useNavigation();
 
-  console.log('menuscreen menuitemstore: ', menuItemStore);
-
   useEffect(() => {
+    dispatch(getProfile());
     dispatch(fetchMenuItems({filter: {}}));
   }, []);
 
   useEffect(() => {
     StorageUtils.getItemSecure({key: STORAGE_CONSTANTS.AUTH_TOKEN}).then(result => {
-      console.log('result: ', result);
       if (result.data) {
-        console.log(' on load, result.data: ', result.data);
         dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_AUTH_TOKEN, result.data));
       }
     }).catch(e => {

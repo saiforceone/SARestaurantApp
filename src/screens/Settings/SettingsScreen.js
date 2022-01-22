@@ -31,15 +31,17 @@ const navigateTo = ({navigation, target, params}) => {
  * @param {Boolean} hasAuthToken
  * @param {Function} logoutActionPrompt
  * @param {Object} navigation
+ * @param {Object} userProfile
  * @returns {JSX.Element}
  * @description Renders content for the settings screen
  */
-const renderContent = ({hasAuthToken, logoutActionPrompt, navigation}) => {
+const renderContent = ({hasAuthToken, logoutActionPrompt, navigation, userProfile}) => {
   return (
     <ScrollView contentContainerStyle={[DetailScreenStyles.scrollView, {padding: SPACING_CONSTANTS.LARGE}]}>
       <UserProfileCard 
         action={hasAuthToken ? logoutActionPrompt : () => navigateTo({navigation, target: 'settingsAuthScreen'})} 
         hasAuthToken={hasAuthToken}
+        user={userProfile}
       />
       <Divider style={DetailScreenStyles.dividerStyle} />
       <DetailRow
@@ -131,7 +133,7 @@ const SettingsScreen = () => {
   
   return (
     <SafeAreaView style={DetailScreenStyles.container}>
-      {renderContent({hasAuthToken: !!appStore.authToken, logoutActionPrompt, navigation})}
+      {renderContent({hasAuthToken: !!appStore.authToken, logoutActionPrompt, navigation, userProfile: appStore.userProfile})}
     </SafeAreaView>
   );
 };
