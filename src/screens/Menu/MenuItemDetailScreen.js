@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import {useDispatch} from 'react-redux';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Image, Text} from 'react-native-elements';
@@ -7,6 +8,7 @@ import { COLORS, FONT_FAMILIES, FONT_SIZES, FONT_WEIGHTS } from '../../constants
 import EmptyCard from '../../components/common/EmptyCard/EmptyCard';
 import { MenuItemDetailStyles } from './Menu.styles';
 import FormattingUtils from '../../utils/FormattingUtils';
+import { addItemToOrder } from '../../store/actions/placeOrderActions';
 
 /**
  * @function renderContent
@@ -60,6 +62,7 @@ const renderContent = ({menuItem, addToOrderAction}) => {
 const MenuItemDetailScreen = prop => {
 
   const [menuItem, setMenuItem] = useState();
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const route = useRoute();
   
@@ -74,9 +77,9 @@ const MenuItemDetailScreen = prop => {
     }
   }, []);
 
-  const addToOrderAction = () => {
-    console.log('Should add to order');
-  }
+  const addToOrderAction = useCallback(() => {
+    dispatch(addItemToOrder({orderItem: menuItem}));
+  }, [menuItem]);
   
   return (
     <SafeAreaView edges={['top', 'left', 'right']} style={{flex: 1}}>

@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
 
 export const SPACING_CONSTANTS = {
+  NONE: 0,
   SMALL: 5,
   MEDIUM: 10,
   LARGE: 15,
