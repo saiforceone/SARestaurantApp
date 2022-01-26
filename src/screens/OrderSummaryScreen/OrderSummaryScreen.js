@@ -1,9 +1,10 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import { Alert, ScrollView, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import {Button, Text} from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import DropDownPicker from 'react-native-dropdown-picker';
 import { COLORS, DetailScreenStyles, SAFE_AREA_EDGES, SPACING_CONSTANTS } from '../../constants/styleConstants';
 import DetailRow from '../../components/common/DetailRow/DetailRow';
 import FormattingUtils from '../../utils/FormattingUtils';
@@ -12,6 +13,7 @@ import OrderSummaryScreenStyles from './OrderSummaryScreen.styles';
 import { placeOrderAction } from '../../store/actions/placeOrderActions';
 import EmptyCard from '../../components/common/EmptyCard/EmptyCard';
 import {removeItemFromOrder} from '../../store/actions/placeOrderActions';
+import {fetchRestaurantLocations} from '../../store/actions/restaurantLocationActions';
 
 /**
  * @function renderContent
@@ -24,11 +26,32 @@ const renderContent = ({
   orderTotal,
   orderInProgress,
   deleteItemPrompt,
-  placeOrderAction
+  placeOrderAction,
+  restaurantLocations,
+  setRestaurantLocations,
+  onSelectRestaurantLocation,
 }) => {
+  console.log('restaurant locations: ', restaurantLocations);
+
+  const [locationPickerOpen, setLocationPickerOpen] = useState(false);
+  const [value, setValue] = useState();
+
   return (
     <View style={DetailScreenStyles.container}>
-      <ScrollView contentContainerStyle={[DetailScreenStyles.scrollView, {paddingHorizontal: SPACING_CONSTANTS.MEDIUM}]}>
+      <View style={DetailScreenStyles.contentContainer}>
+        <DropDownPicker
+          containerStyle={{marginBottom: SPACING_CONSTANTS.MEDIUM}}
+          onChangeValue={v => {
+            console.log('onChangeValue: ', v);
+            onSelectRestaurantLocation({location: v})
+          }}
+          open={locationPickerOpen}
+          value={value}
+          items={restaurantLocations}
+          setOpen={setLocationPickerOpen}
+          setValue={setValue}
+          setItems={setRestaurantLocations}
+        />
         <DetailRow
           labelText='Number of Items'
           valueText={`${orderItems.length}`}
@@ -37,6 +60,8 @@ const renderContent = ({
           labelText='Order Total'
           valueText={`${FormattingUtils.formatAsCurrency({value: orderTotal})}`}
         />
+      </View>
+      <ScrollView contentContainerStyle={[DetailScreenStyles.scrollView, {paddingHorizontal: SPACING_CONSTANTS.MEDIUM}]}>
         <Text style={OrderSummaryScreenStyles.sectionText}>Items In Your Order</Text>
         {orderItems.map((item, itemIndex) => <OrderDetailItem
           key={`${item._id}-${itemIndex}`}
@@ -74,21 +99,68 @@ const OrderSummaryScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const placeOrderStore = useSelector(state => state.placeOrder);
+  const restaurantLocationStore = useSelector(state => state.restaurantLocations);
+  const [restaurantLocations, setRestaurantLocations] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState();
 
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => undefined,
     });
+    dispatch(fetchRestaurantLocations());
   }, []);
+
+  useEffect(() => {
+    const locations = restaurantLocationStore.items.map(loc => ({
+      label: loc.locationName,
+      value: loc._id,
+    }));
+    console.log('nope nope nope!')
+    setRestaurantLocations(locations);
+  }, []);
+
+  const onOrderSuccess = () => {
+    if (placeOrderStore.orderSuccess) {
+      Alert.alert(
+        'Order Placed Successfully',
+        'Your order was placed successfully. Enjoy',
+        [
+          {
+            text: 'Ok'
+          }
+        ]
+      );
+      navigation.pop();
+    }
+  };
+
+  const onSelectRestaurantLocation = useCallback(({location}) => {
+    console.log('onSelectRestaurantLocation callback location -> ', location);
+    if (location) {
+      setSelectedLocation(location);
+    }
+  }, [selectedLocation]);
 
   /**
    * @function placeOrder
    * @description executes the action to place
    */
   const placeOrder = useCallback(() => {
+    const alertTitle = 'Unable to Place Order';
+    if (!selectedLocation) {
+      return Alert.alert(
+        alertTitle,
+        'Please select a restaurant location before trying to place your order',
+        [
+          {
+            text: 'Ok',
+          },
+        ],
+      )
+    }
     if (!placeOrderStore.orderItems.length) {
       return Alert.alert(
-        'Unable to Place Order',
+        alertTitle,
         'There are currently no items in your order. You may add some from the menu.',
         [
           {
@@ -98,8 +170,14 @@ const OrderSummaryScreen = () => {
       );
     }
 
-    dispatch(placeOrderAction({orderItems: placeOrderStore.orderItem}));
-  }, [placeOrderStore]);
+    dispatch(placeOrderAction({
+      deliverNotes: '',
+      orderItems: placeOrderStore.orderItems,
+      orderNotes: '',
+      relatedLocation: selectedLocation,
+      onOrderSuccess,
+    }));
+  }, [placeOrderStore, selectedLocation]);
 
   const deleteItem = useCallback(({itemIndex}) => {
     dispatch(removeItemFromOrder({itemIndex}))
@@ -137,6 +215,9 @@ const OrderSummaryScreen = () => {
         orderInProgress: placeOrderStore.requestInProgress,
         orderTotal: placeOrderStore.orderTotal,
         placeOrderAction: placeOrder,
+        restaurantLocations,
+        setRestaurantLocations,
+        onSelectRestaurantLocation
         })
       }
     </SafeAreaView>

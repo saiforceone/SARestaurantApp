@@ -3,6 +3,7 @@ import { PLACE_ORDER_ACTIONS as POA } from "../constants";
 const INITIAL_STATE = {
   lastError: '',
   orderItems: [],
+  orderSuccess: false,
   orderTotal: 0,
   requestInProgress: false,
 };
@@ -15,18 +16,12 @@ const INITIAL_STATE = {
  */
 const calculateOrderTotal = ({orderItems}) => {
 
-  let total = 0.00;
-  orderItems.forEach(item => total += parseFloat(item.baseCost));
-  return total;
-
-  // TODO: fix this tomorrow
-  // if (orderItems.length === 1) return orderItems[0].baseCost;
+  if (orderItems.length === 1) return orderItems[0].baseCost;
   
-  // const reducer = (prev, current) => parseFloat(prev.baseCost) + parseFloat(current.baseCost);
+  const reducer = (prev, current) => parseFloat(prev) + parseFloat(current);
 
-  // let reducerTotal = orderItems.reduce(reducer);
-  // console.log('calculateOrderTotal REAL SOLUTION: ', reducerTotal);
-  // return reducerTotal
+  let reducerTotal = orderItems.map(item => item.baseCost).reduce(reducer);
+  return reducerTotal
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -40,6 +35,8 @@ export default (state = INITIAL_STATE, action) => {
     }
     case POA.SET_ERROR:
       return {...state, lastError: payload};
+    case POA.REMOVE_ALL_ORDER_ITEMS:
+      return {...state, orderItems: [], orderTotal: 0};
     case POA.REMOVE_ORDER_ITEM: {
       const _orderItems = [...state.orderItems];
       const {itemIndex} = payload;
@@ -49,6 +46,8 @@ export default (state = INITIAL_STATE, action) => {
       const orderTotal = calculateOrderTotal({orderItems: _orderItems});
       return {...state, orderItems: _orderItems, orderTotal};
     }
+    case POA.SET_ORDER_SUCCESS:
+      return {...state, orderSuccess: payload};
     case POA.SET_REQ_IN_PROGRESS:
       return {...state, requestInProgress: payload};
     case POA.UNSET_DATA:

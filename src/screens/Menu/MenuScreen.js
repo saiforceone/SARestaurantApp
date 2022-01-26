@@ -12,6 +12,7 @@ import { STORAGE_CONSTANTS } from '../../constants';
 import ActionCreatorUtils from '../../store/utils/ActionCreatorUtils';
 import { APP_ACTIONS } from '../../store/constants';
 import { getProfile } from '../../store/actions/appAction';
+import { fetchRestaurantLocations } from '../../store/actions/restaurantLocationActions';
 
 /**
  * @function MenuScreen
@@ -27,6 +28,7 @@ const MenuScreen = () => {
   useEffect(() => {
     dispatch(getProfile());
     dispatch(fetchMenuItems({filter: {}}));
+    dispatch(fetchRestaurantLocations());
   }, []);
 
   useEffect(() => {
