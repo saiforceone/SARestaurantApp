@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import {Alert, ScrollView, Text, View} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {Divider, Icon} from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -104,6 +104,18 @@ const SettingsScreen = () => {
 
     fetchProfile().then();
   }, []);
+
+  // useFocusEffect(() => {
+  //   console.log('use focus effect fired...');
+  //   dispatch(getProfile());
+  // });
+
+  // TODO: FIX THIS
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     return () => dispatch(getProfile());;
+  //   }, [appStore.userProfile])
+  // );
 
   const logoutAction = useCallback(() => {
 

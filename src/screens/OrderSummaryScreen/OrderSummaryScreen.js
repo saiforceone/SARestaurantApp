@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import { Alert, ScrollView, View } from 'react-native';
+import { Alert, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import {Button, Text} from 'react-native-elements';
+import {Button, Input, Text} from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -14,6 +14,7 @@ import { placeOrderAction } from '../../store/actions/placeOrderActions';
 import EmptyCard from '../../components/common/EmptyCard/EmptyCard';
 import {removeItemFromOrder} from '../../store/actions/placeOrderActions';
 import {fetchRestaurantLocations} from '../../store/actions/restaurantLocationActions';
+import ProgressOverlay from '../../components/common/ProgressOverlay/ProgressOverlay';
 
 /**
  * @function renderContent
@@ -30,62 +31,80 @@ const renderContent = ({
   restaurantLocations,
   setRestaurantLocations,
   onSelectRestaurantLocation,
+  onUpdateOrderInfo,
+  orderInfo
 }) => {
-  console.log('restaurant locations: ', restaurantLocations);
-
   const [locationPickerOpen, setLocationPickerOpen] = useState(false);
   const [value, setValue] = useState();
 
   return (
-    <View style={DetailScreenStyles.container}>
-      <View style={DetailScreenStyles.contentContainer}>
-        <DropDownPicker
-          containerStyle={{marginBottom: SPACING_CONSTANTS.MEDIUM}}
-          onChangeValue={v => {
-            console.log('onChangeValue: ', v);
-            onSelectRestaurantLocation({location: v})
-          }}
-          open={locationPickerOpen}
-          value={value}
-          items={restaurantLocations}
-          setOpen={setLocationPickerOpen}
-          setValue={setValue}
-          setItems={setRestaurantLocations}
-        />
-        <DetailRow
-          labelText='Number of Items'
-          valueText={`${orderItems.length}`}
-        />
-        <DetailRow
-          labelText='Order Total'
-          valueText={`${FormattingUtils.formatAsCurrency({value: orderTotal})}`}
-        />
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      enabled
+      keyboardVerticalOffset={100}
+      style={{flex: 1}}
+    >
+      <View style={DetailScreenStyles.container}>
+        <View style={DetailScreenStyles.contentContainer}>
+          <Text style={OrderSummaryScreenStyles.sectionText}>Choose Pickup Location</Text>
+          <DropDownPicker
+            containerStyle={{marginBottom: SPACING_CONSTANTS.SMALL}}
+            onChangeValue={v => {
+              console.log('onChangeValue: ', v);
+              onSelectRestaurantLocation({location: v})
+            }}
+            open={locationPickerOpen}
+            value={value}
+            items={restaurantLocations}
+            setOpen={setLocationPickerOpen}
+            setValue={setValue}
+            setItems={setRestaurantLocations}
+          />
+        </View>
+        <ScrollView contentContainerStyle={[DetailScreenStyles.scrollView, {paddingHorizontal: SPACING_CONSTANTS.MEDIUM}]}>
+          <DetailRow
+            labelText='Number of Items'
+            valueText={`${orderItems.length}`}
+          />
+          <DetailRow
+            labelText='Order Total'
+            valueText={`${FormattingUtils.formatAsCurrency({value: orderTotal})}`}
+          />
+          <Input
+            placeholder='Order Notes (optional)'
+            onChangeText={value => onUpdateOrderInfo({key: 'orderNotes', value})}
+            value={orderInfo.orderNotes}
+          />
+          <Input
+            placeholder='Delivery Notes (optional)'
+            onChangeText={value => onUpdateOrderInfo({key: 'deliveryNotes', value})}
+            value={orderInfo.deliveryNotes}
+          />
+          <Text style={OrderSummaryScreenStyles.sectionText}>Items In Your Order</Text>
+          {orderItems.map((item, itemIndex) => <OrderDetailItem
+            key={`${item._id}-${itemIndex}`}
+            deleteAction={() => deleteItemPrompt({itemIndex, itemName: item.itemName})}
+            itemCost={item.baseCost}
+            itemName={item.itemName}
+          />)}
+          {!orderItems.length && (<EmptyCard title='No items in this order' details='You may add an item from the menu.' />)}
+        </ScrollView>
+        <View style={DetailScreenStyles.buttonContainer}>
+          <Button
+            buttonStyle={{backgroundColor: COLORS.GREENISH}}
+            containerStyle={{marginBottom: SPACING_CONSTANTS.LARGE}}
+            disabled={orderInProgress}
+            icon={{
+              color: COLORS.JUSTWHITE,
+              name: 'credit-card-check',
+              type: 'material-community'
+            }}
+            onPress={placeOrderAction}
+            title='Place Order Now'
+          />
+        </View>
       </View>
-      <ScrollView contentContainerStyle={[DetailScreenStyles.scrollView, {paddingHorizontal: SPACING_CONSTANTS.MEDIUM}]}>
-        <Text style={OrderSummaryScreenStyles.sectionText}>Items In Your Order</Text>
-        {orderItems.map((item, itemIndex) => <OrderDetailItem
-          key={`${item._id}-${itemIndex}`}
-          deleteAction={() => deleteItemPrompt({itemIndex, itemName: item.itemName})}
-          itemCost={item.baseCost}
-          itemName={item.itemName}
-        />)}
-        {!orderItems.length && (<EmptyCard title='No items in this order' details='You may add an item from the menu.' />)}
-      </ScrollView>
-      <View style={DetailScreenStyles.buttonContainer}>
-        <Button
-          buttonStyle={{backgroundColor: COLORS.GREENISH}}
-          containerStyle={{marginBottom: SPACING_CONSTANTS.LARGE}}
-          disabled={orderInProgress}
-          icon={{
-            color: COLORS.JUSTWHITE,
-            name: 'credit-card-check',
-            type: 'material-community'
-          }}
-          onPress={placeOrderAction}
-          title='Place Order Now'
-        />
-      </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -102,6 +121,8 @@ const OrderSummaryScreen = () => {
   const restaurantLocationStore = useSelector(state => state.restaurantLocations);
   const [restaurantLocations, setRestaurantLocations] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState();
+  const [deliveryNotes, setDeliveryNotes] = useState('');
+  const [orderNotes, setOrderNotes] = useState('');
 
   useEffect(() => {
     navigation.setOptions({
@@ -115,7 +136,7 @@ const OrderSummaryScreen = () => {
       label: loc.locationName,
       value: loc._id,
     }));
-    console.log('nope nope nope!')
+
     setRestaurantLocations(locations);
   }, []);
 
@@ -133,6 +154,22 @@ const OrderSummaryScreen = () => {
       navigation.pop();
     }
   };
+
+  /**
+   * @function onUpdateOrderInfo
+   * @description Update either the order notes or delivery notes
+   * @returns {void}
+   */
+  const onUpdateOrderInfo = useCallback(({key, value})=> {
+    switch (key) {
+      case 'orderNotes':
+        return setOrderNotes(value);
+      case 'deliveryNotes':
+        return setDeliveryNotes(value);
+      default:
+        break;
+    }
+  }, [deliveryNotes, orderNotes]);
 
   const onSelectRestaurantLocation = useCallback(({location}) => {
     console.log('onSelectRestaurantLocation callback location -> ', location);
@@ -171,9 +208,9 @@ const OrderSummaryScreen = () => {
     }
 
     dispatch(placeOrderAction({
-      deliverNotes: '',
+      deliveryNotes,
       orderItems: placeOrderStore.orderItems,
-      orderNotes: '',
+      orderNotes,
       relatedLocation: selectedLocation,
       onOrderSuccess,
     }));
@@ -217,9 +254,19 @@ const OrderSummaryScreen = () => {
         placeOrderAction: placeOrder,
         restaurantLocations,
         setRestaurantLocations,
-        onSelectRestaurantLocation
+        onSelectRestaurantLocation,
+        onUpdateOrderInfo,
+        orderInfo: {
+          orderNotes,
+          deliveryNotes,
+        }
         })
       }
+      <ProgressOverlay
+        details='Your order is being placed.'
+        title='Please wait...'
+        visible={placeOrderStore.requestInProgress}
+      />
     </SafeAreaView>
   );
 };

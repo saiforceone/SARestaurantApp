@@ -7,6 +7,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {COLORS, SAFE_AREA_EDGES} from '../../constants/styleConstants';
 import AuthScreenStyles from './AuthScreen.styles';
 import { authenticate } from '../../store/actions/appAction';
+import ProgressOverlay from '../../components/common/ProgressOverlay/ProgressOverlay';
 
 /**
  * @function renderContent
@@ -143,6 +144,11 @@ export const AuthScreen = () => {
         isAuthenticating: appStore.isAuthenticating,
         updateStateVar, authAction,
       })}
+      <ProgressOverlay
+        details='Please wait while you are being authenticated. Good food awaits!'
+        title='Logging you in'
+        visible={appStore.isAuthenticating}
+      />
     </SafeAreaView>
   );
 };

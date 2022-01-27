@@ -46,7 +46,9 @@ export const authenticate = ({username, password, navigation, isRegistering = fa
       }
       navigation.pop();
 
+      getProfile();
     } catch (e) {
+      console.log('auth error: ', e);
       dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_IS_AUTHENTICATING, false));
       dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_ERROR, e.toString()));
     }
@@ -90,6 +92,7 @@ export const getProfile = () => {
       dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_USER_PROFILE, data.profile));
       
     } catch (e) {
+      console.log('getProfile error: ', e);
       dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_IS_FETCHING_PROFILE, false));
       dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_ERROR, e.toString()));
     }
