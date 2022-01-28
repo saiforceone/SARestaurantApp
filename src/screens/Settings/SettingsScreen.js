@@ -105,17 +105,11 @@ const SettingsScreen = () => {
     fetchProfile().then();
   }, []);
 
-  // useFocusEffect(() => {
-  //   console.log('use focus effect fired...');
-  //   dispatch(getProfile());
-  // });
-
-  // TODO: FIX THIS
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     return () => dispatch(getProfile());;
-  //   }, [appStore.userProfile])
-  // );
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(getProfile());
+    }, [])
+  );
 
   const logoutAction = useCallback(() => {
 
