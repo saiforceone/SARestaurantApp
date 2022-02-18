@@ -22,13 +22,10 @@ export const fetchMenuItems = ({filter = {}}) => {
 
       const {data, success} = responseData;
 
-      console.log('data: ', data);
-
       if (!success || !Array.isArray(data)) return dispatch(ActionCreatorUtils.buildAction(MIA.SET_ERROR, 'unexpected error retrieving menu items'));
 
       dispatch(ActionCreatorUtils.buildAction(MIA.SET_DATA, data));
     } catch (e) {
-      console.log('fetchMenuItems erorr: ', e.toString());
       dispatch(ActionCreatorUtils.buildAction(MIA.SET_ERROR, e.toString()));
       dispatch(ActionCreatorUtils.buildAction(MIA.SET_REQ_IN_PROGRESS, false));
     }

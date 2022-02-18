@@ -26,11 +26,9 @@ export const fetchOrders = () => {
       const {data: responseData} = await axios.get(url, {headers});
       dispatch(ActionCreatorUtils.buildAction(ORDER_ACTIONS.SET_REQ_IN_PROGRESS, false));
       const {data, success} = responseData;
-      console.log('fetchOrders responseData: ', responseData);
       if (!success) return dispatch(ActionCreatorUtils.buildAction(ORDER_ACTIONS.SET_ERROR, 'an unexpected error occurred'));
       dispatch(ActionCreatorUtils.buildAction(ORDER_ACTIONS.SET_DATA, data));
     } catch (e) {
-      console.log('fetchOrders error: ', e.toString());
       dispatch(ActionCreatorUtils.buildAction(ORDER_ACTIONS.SET_REQ_IN_PROGRESS, false));
       return dispatch(ActionCreatorUtils.buildAction(ORDER_ACTIONS.SET_ERROR, e.toString()));
     }

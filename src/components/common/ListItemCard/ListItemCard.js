@@ -13,7 +13,6 @@ import ListItemCardStyles from './ListItemCard.styles';
 const ListItemCard = props => {
 
   const {action, title, details, imageUrl, extraContent} = props;
-
   return (
     <TouchableOpacity onPress={action}>
       <View style={ListItemCardStyles.container}>
@@ -22,7 +21,9 @@ const ListItemCard = props => {
         )}
         <View style={ListItemCardStyles.contentContainer}>
           <Text style={ListItemCardStyles.title}>{title}</Text>
-          {details && (<Text numberOfLines={2} style={ListItemCardStyles.details}>{details}</Text>)}
+          {details ? (
+            <Text numberOfLines={2} style={ListItemCardStyles.details}>{details}</Text>
+          ) : undefined}
           {extraContent && (<View style={ListItemCardStyles.extraContentContainer}>{extraContent}</View>)}
         </View>
       </View>

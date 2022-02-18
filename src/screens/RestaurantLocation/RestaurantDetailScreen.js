@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Linking, ScrollView, View} from 'react-native';
+import {Alert, Linking, ScrollView, View} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {Icon, Image, Text} from 'react-native-elements';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -10,7 +10,17 @@ import DetailRow from '../../components/common/DetailRow/DetailRow';
 
 const openUrl = async ({url}) => {
   const canOpen = await Linking.canOpenURL(url);
-  if (!canOpen) return console.log('unable to open url: ', url);
+  if (!canOpen) { 
+    return Alert.alert(
+      'Unable to open link',
+      'This device cannot open this link',
+      [
+        {
+          text: 'Dismiss'
+        }
+      ]
+    );
+  }
 
   await Linking.openUrl(url);
 }
@@ -57,7 +67,6 @@ const renderContent = ({restaurantLocation, callAction}) => {
     services = servicesAvailable.join(', ');
   }
 
-  console.log('contact details: ', contactDetails);
   let phone = 'Unavailable';
   let email = 'Unavailable';
   let url = 'Unavailable';

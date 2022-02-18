@@ -31,7 +31,6 @@ export const authenticate = ({username, password, navigation, isRegistering = fa
       dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_IS_AUTHENTICATING, false));
 
       const {token} = responseData;
-      console.log('authenticate result: ', token);
 
       if (!token) {
         return dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_ERROR, 'Failed to authenticate. Check credentials'));
@@ -48,7 +47,6 @@ export const authenticate = ({username, password, navigation, isRegistering = fa
 
       getProfile();
     } catch (e) {
-      console.log('auth error: ', e);
       dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_IS_AUTHENTICATING, false));
       dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_ERROR, e.toString()));
     }
@@ -84,7 +82,6 @@ export const getProfile = () => {
 
       const {success, data} = responseData;
 
-      console.log('appAction.getProfile profile: ', data.profile);
       if (!success || !data.profile) {
         return dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_ERROR, 'Failed to retrieve profile'));
       }
@@ -92,7 +89,6 @@ export const getProfile = () => {
       dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_USER_PROFILE, data.profile));
       
     } catch (e) {
-      console.log('getProfile error: ', e);
       dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_IS_FETCHING_PROFILE, false));
       dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_ERROR, e.toString()));
     }

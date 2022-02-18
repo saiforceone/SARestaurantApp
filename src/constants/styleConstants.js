@@ -55,6 +55,16 @@ export const CommonNavStyles = {
   },
 };
 
+export const MiscStyles = StyleSheet.create({
+  flexRow: {
+    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    padding: SPACING_CONSTANTS.SMALL,
+  }
+})
+
 export const DetailScreenStyles = StyleSheet.create({
   container: {
     backgroundColor: '#F5F5F5',

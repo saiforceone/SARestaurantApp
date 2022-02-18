@@ -133,7 +133,7 @@ const renderContent = ({order}) => {
               />
             }
             labelText='Number of Items'
-            valueText={order.orderItems.length}
+            valueText={`${order.orderItems.length}`}
           />
           {renderOrderItems({orderItems: order.orderItems})}
         </View>
@@ -151,8 +151,6 @@ const OrderDetailScreen = () => {
 
   const [order, setOrder] = useState();
   const route = useRoute();
-
-  console.log('OrderDetailScreen with params: ', route.params);
 
   useEffect(() => {
 

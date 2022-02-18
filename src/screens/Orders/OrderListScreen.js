@@ -1,15 +1,17 @@
 import React, {useCallback, useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {FlatList, Text, View} from 'react-native';
+import {FlatList, View} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Button} from 'react-native-elements';
+import {Button, Icon} from 'react-native-elements';
 import EmptyCard from '../../components/common/EmptyCard/EmptyCard';
-import { COLORS, DetailScreenStyles } from '../../constants/styleConstants';
+import { COLORS, DetailScreenStyles, MiscStyles, SPACING_CONSTANTS } from '../../constants/styleConstants';
 import ListItemCard from '../../components/common/ListItemCard/ListItemCard';
 import { fetchOrders } from '../../store/actions/orderActions';
 import ListHeader from '../../components/common/ListHeader/ListHeader';
 import { getProfile } from '../../store/actions/appAction';
+import CustomChip from '../../components/common/CustomChip/CustomChip';
+import FormattingUtils from '../../utils/FormattingUtils';
 
 /**
  * @function RenderItem
@@ -21,8 +23,42 @@ import { getProfile } from '../../store/actions/appAction';
 const renderItem = ({item, itemAction}) => (
   <ListItemCard
     action={() => itemAction({item})}
-    title={`Order: ${item._id}`}
-    details={`Status: ${item.orderStatus}`}
+    title={`Order #: ${item._id}`}
+    details={`Order Placed: ${FormattingUtils.formatDate({value: item.orderDate})}`}
+    extraContent={
+      <View style={[MiscStyles.flexRow, {paddingHorizontal: 0}]}>
+        <CustomChip
+          iconElement={
+            <Icon
+              color={COLORS.OFFWHITE}
+              name='credit-card'
+              size={16}
+              type='material-community'
+            />
+          }
+          title={FormattingUtils.formatAsCurrency({value: item.orderTotal})}
+        />
+        <CustomChip
+          containerOverride={{marginLeft: SPACING_CONSTANTS.SMALL}}
+          iconElement={
+            <Icon
+              color={COLORS.OFFWHITE}
+              name='check-square'
+              size={16}
+              type='font-awesome'
+            />
+          }
+          title={item.orderStatus}
+        />
+        <CustomChip
+          containerOverride={{marginLeft: SPACING_CONSTANTS.SMALL}}
+          iconElement={
+            <Icon color={COLORS.OFFWHITE} name='location-pin' size={16} />
+          }
+          title={item.relatedLocation.locationName}
+        />
+      </View>
+    }
   />
 );
 

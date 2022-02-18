@@ -36,7 +36,7 @@ const RestaurantLocationScreen = props => {
   const keyExtractor = (item, id) => item['_id'];
 
   const renderItem = ({item}) => {
-    console.log('render restaurant data: ', item);
+
     const {images} = item;
     let mainImage;
     if (Array.isArray(images) && images.length) {

@@ -50,7 +50,6 @@ const renderContent = ({
           <DropDownPicker
             containerStyle={{marginBottom: SPACING_CONSTANTS.SMALL}}
             onChangeValue={v => {
-              console.log('onChangeValue: ', v);
               onSelectRestaurantLocation({location: v})
             }}
             open={locationPickerOpen}
@@ -172,7 +171,6 @@ const OrderSummaryScreen = () => {
   }, [deliveryNotes, orderNotes]);
 
   const onSelectRestaurantLocation = useCallback(({location}) => {
-    console.log('onSelectRestaurantLocation callback location -> ', location);
     if (location) {
       setSelectedLocation(location);
     }

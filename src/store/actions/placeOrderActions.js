@@ -125,7 +125,6 @@ export const placeOrderAction = ({
       }
 
     } catch (e) {
-      console.log('placeOrderActions.placeOrder error: ', e.toString());
       dispatch(ActionCreatorUtils.buildAction(POA.SET_ERROR, e.toString()));
       dispatch(ActionCreatorUtils.buildAction(POA.SET_REQ_IN_PROGRESS, false));
     }

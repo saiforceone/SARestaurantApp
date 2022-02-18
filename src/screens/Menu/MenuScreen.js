@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {FlatList, Image, StyleSheet, TouchableOpacity, Text, View} from 'react-native';
+import {FlatList, Text, View, Alert} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { fetchMenuItems } from '../../store/actions/menuItemActions';
@@ -37,7 +37,15 @@ const MenuScreen = () => {
         dispatch(ActionCreatorUtils.buildAction(APP_ACTIONS.SET_AUTH_TOKEN, result.data));
       }
     }).catch(e => {
-      console.log("well, this didn't work.");
+      Alert.alert(
+        'Oops, something went wrong',
+        `Something unexpected happened. ${e.toString()}`,
+        [
+          {
+            text: 'Dismiss'
+          }
+        ]
+      )
     })
   }, []);
 
@@ -73,7 +81,7 @@ const MenuScreen = () => {
       />
       <FlatList
         data={menuItemStore.items}
-        key={keyExtractor}
+        keyExtractor={keyExtractor}
         onRefresh={() => dispatch(fetchMenuItems({filter: {}}))}
         refreshing={menuItemStore.requestInProgress}
         renderItem={renderItem}
